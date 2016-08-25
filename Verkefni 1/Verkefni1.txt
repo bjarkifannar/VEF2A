@@ -1,0 +1,159 @@
+1.	Hver er munurinn á echo() og print()
+
+	/* Svar */
+	echo skilar engu en print skilar 1 þannig að það er hægt að nota print í t.d. if setningar. echo getur tekið á móti mörgum "parameters" en print getur bara tekið einn.
+
+2.	Hver er munurinn á einföldum gæsalöppum og tvöföldum, sýndu mér kóðadæmi sem sýnir mismunandi niðurstöðu
+
+	/* Svar */
+	Tvöfaldar gæsalappir geta skrifað út innihald breytu en einfaldar skrifa út nafn breytunnar.
+
+	/* PHP Dæmi */
+	$breyta = 'Þetta er breyta!';
+	echo '$breyta'; /* Skrifar: $breyta */
+	echo "$breyta"; /* Skrifar: Þetta er breyta! */
+
+3.	Hvað er $GLOBALS, hvernig virkar það, komdu með dæmi.
+
+	/* Svar */
+	$GLOBALS er associative fylki sem geymir allar global breytur.
+
+	/* PHP Dæmi */
+	$breyta = 'Breyta';
+	echo $GLOBALS['breyta']; /* Srifar: Breyta */
+
+4.	Hvenær myndir þú nota === virkjann fremur en ==, komdu með dæmi
+
+	/* Svar */
+	Ef að breytur eiga að vera sama týpa þarf að nota ===, en ef gildið þarf bara að vera eins er betra að nota ==.
+	$breyta1 = '1';
+	$breyta2 = 1;
+	$breyta1 == $breyta2 er True
+	$breyta1 === $breyta2 er False.
+
+	/* PHP Dæmi */
+	$breyta1 = '1';
+	$breyta2 = 1;
+
+	if ($breyta1 == $breyta2) {
+		echo 'Breyta 1 == Breyta 2';
+	} else {
+		echo 'Breyta 1 !== breyta 2';
+	}
+
+	echo '<br>';
+
+	if ($breyta1 === $breyta2) {
+		echo 'Breyta 1 === Breyta 2';
+	} else {
+		echo 'Breyta 1 !=== Breyta 2';
+	}
+
+5.	printf() er sniðugt af tveimur ástæðum hverjar eru þær? komdu einnig með kóðadæmi.
+
+	/* Svar */
+	printf tekur streng með "placeholders" og breytur. printf skrifar út strenginn með innihaldi breytanna.
+
+	/* PHP Dæmi */
+	$hello = 'Hello';
+
+	printf("%s World!", $hello); /* Skrifar: Hello World! */
+
+6.	Hvað skrifar eftirfarandi kóði? (útskýrðu línu fyrir línu)
+
+	/* Svar */
+	$a = 1; Býr til breytuna $a og lætur hana vera 1
+	$b = $a++; Býr til breytuna $b, lætur hana vera $a og bætir 1 við $a ($a er 2, $b er 1)
+	$c = ++$a; Býr til breytuna $c, bætir 1 við $a ($a verður 3) og lætur $c vera $a ($c er 3)
+	echo $a . $b . $c; Skrifar út 313
+
+8.	Búðu til nefnt fylki (Associative array) með eftirfarandi borgum og löndum; Japan -Tokyo, Mexico -
+	Mexico City, USA - New York City, India - Mumbai, Korea - Seoul, China - Shanghai. Notið foreach til að
+	birta Lönd og borgir
+
+	/* PHP Dæmi */
+	$borgir = array('Japan' => 'Tokyo', 'Mexico' => 'Mexico City', 'USA' => 'New York City', 'India' => 'Mumbai', 'Korea' => 'Seoul', 'China' => 'Shanghai');
+
+	foreach ($borgir as $land => $borg) {
+		echo $land.' - '.$borg.'<br>';
+	}
+
+9.	Notaðu echo og list() til að birta á skjá eftrifarandi gildi úr $colors.
+
+	/* PHP Dæmi */
+	$colors = array("red", "blue", "green");
+	list($g, $b, $r) = $colors;
+
+	echo $r.', '.$b.', '.$g; /* Skrifar: red, blue, green */
+
+10.	Gefið er fylkið $states = array("Texas", "Ohio"); Bættu við aftast New York og bættu við fremst
+	California. (notaðu innbyggt php fall til að ná þessu fram)
+
+	/* PHP Dæmi */
+	$states = array('Texas', 'Ohio');
+	array_push($states, 'New York');
+	array_unshift($states, 'California');
+	print_r($states);
+
+11.	Notaðu shuffle() fallið á fylkið $states og birtu útkomuna
+
+	/* PHP Dæmi */
+	shuffle($states);
+	print_r($states);
+
+12.	Birtu í töfluformi (html) eftirfarandi gögn úr fylkinu $products. 
+
+	/* PHP Dæmi */
+	$products = array(array('08:10', '10:30', '13:15'), array('GSÖ2B2U', 'VSH2B2U', 'FOR2B2U'), array('GUS', 'GJG', 'GRL'));
+
+	echo '<table>';
+
+	for ($i = 0; $i < count($products); $i++) {
+		echo '<tr>';
+
+		for ($j = 0; $j < count($products[$i]); $j++) {
+			echo '<td>'.$products[$j][$i].'</td>';
+		}
+
+		echo '</tr>';
+	}
+
+	echo '</table>';
+
+13.	Gefið er eftirfarandi $customers fylki sem geymir önnur fylki (2d array):
+
+	/* PHP Dæmi */
+	$customers[] = array("Jason Gilmore", "jason@example.com", "614-999-9999");
+	$customers[] = array("Jesse James", "jesse@example.net", "818-999-9999");
+	$customers[] = array("Donald Duck", "donald@example.org", "212-999-9999");
+
+	foreach ($customers as $customer) {
+		vprintf("<p>Name: %s<br />E-mail: %s<br />Phone: %s</p>", $customer);
+	}
+
+14.	Hver er útkoman með að nota a) sort() fallið og hinsvegar natcasesort() á $pic?
+	$pic = array("pic2.jpg", "PIC10.jpg", "pic20.jpg", "pic1.jpg");
+
+	/* Svar */
+	sort() endurraðar $pic í PIC10.jpg, pic1.jpg, pic2.jpg, pic20.jpg
+	natcasesort() endurraðar $pic í pic1.jpg, pic2.jpg, PIC10.jpg, pic20.jpg
+
+15.	Hvað er HTTP, hvað þýðir að það sé stateless (útskýrðu).
+
+	/* Svar */
+	HTTP er Hypertext Transfer Protocol.
+	Það að HTTP er stateless þýðir að hver fyrirspurn er ótengd öðrum fyrirspurnum.
+
+16.	Útskýrðu eftirfarandi URL (samsetningu) útfrá protocol og domains; http://www.tskoli.is
+
+	/* Svar */
+	http:// er það "protocol" sem er notað.
+	www. stendur fyrir World Wide Web og merkir að þetta sé vefsíða á netinu.
+	tskoli.is er domain nafn síðunnar sem vísar á ip tölu serversins sem síðan er á.
+
+17.	Hvað er server-side scripting? Útskýrðu ferlið.
+
+	/* Svar */
+	Server-side scripting er kóði sem serverinn sér um.
+	Notandi sendir fyrirspurn á server og biður um vefsíðu,
+	serverinn tekur á móti fyrirspurninni og keyrir server-side kóða ef það þarf og sendir síðan útkomuna í HTML skjali.
