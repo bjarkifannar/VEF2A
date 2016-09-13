@@ -37,12 +37,8 @@ html, body {
 	width: 90%;
 	height: 100%;
 	margin: 0 auto;
-	padding: 0;
+	padding: 0.1em;
 	display: block;
-
-	.page-title {
-		text-align: center;
-	}
 }
 
 .section-split {
@@ -51,14 +47,7 @@ html, body {
 	background-color: $baseColor;
 }
 
-.top-img {
-	width: 20em;
-	max-width: 100%;
-	margin: 0.5em auto;
-	display: block;
-}
-
-.top-img-title {
+.title {
 	text-align: center;
 }
 
@@ -74,5 +63,6 @@ html, body {
 	}
 }
 
+@import 'flex';
 @import 'header';
 @import 'footer';

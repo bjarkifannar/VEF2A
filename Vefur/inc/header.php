@@ -4,16 +4,16 @@
 			<nav>
 				<ul class="header-menu">
 					<?php
-						if ($pageName == 'Forsíða') {
-							echo '<li><a href="index.php" class="current-page">Forsíða</a></li>';
+						if ($pageName == 'Núna') {
+							echo '<li><a href="index.php" class="current-page">Núna</a></li>';
 						} else {
-							echo '<li><a href="index.php">Forsíða</a></li>';
+							echo '<li><a href="index.php">Núna</a></li>';
 						}
 
-						if ($pageName == 'Síða 2') {
-							echo '<li><a href="page2.php" class="current-page">Síða 2</a></li>';
+						if ($pageName == 'Allt') {
+							echo '<li><a href="page2.php" class="current-page">Allt</a></li>';
 						} else {
-							echo '<li><a href="page2.php">Síða 2</a></li>';
+							echo '<li><a href="page2.php">Allt</a></li>';
 						}
 					?>
 				</ul>

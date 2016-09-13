@@ -1,0 +1,30 @@
+.times-container {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	align-content: flex-start;
+}
+
+.time-div {
+	width: 100%;
+	min-width: 11em;
+	margin: 0.25em 0;
+	padding: 0.5em;
+	align-self: flex-start;
+	align-content: center;
+	border: 2px solid $baseColor;
+}
+
+@media screen and (min-width: $widthMed) {
+	.time-div {
+		margin: 0.25em 0.5em 0.25em 0;
+		width: 45%;
+	}
+}
+
+@media screen and (min-width: $widthLar) {
+	.time-div {
+		width: 30%;
+	}
+}
