@@ -43,12 +43,31 @@ html, body {
 
 .section-split {
 	width: 100%;
-	height: 0.125em;
-	background-color: $baseColor;
+	height: 0.2em;
+	background-color: $baseColor * 0.8;
 }
 
 .title {
 	text-align: center;
+	color: $baseColor;
+}
+
+.error {
+	text-align: center;
+	color: red;
+}
+
+.required-message {
+	color: red;
+}
+
+.row {
+	border-bottom: 3px solid $baseColor * 0.9;
+	padding: 0 0 1em 0;
+}
+
+.no-border {
+	border: 0;
 }
 
 @media screen and (min-width: $widthMed) {
@@ -64,5 +83,6 @@ html, body {
 }
 
 @import 'flex';
+@import 'forms';
 @import 'header';
 @import 'footer';

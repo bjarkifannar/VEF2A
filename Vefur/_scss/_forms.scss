@@ -1,0 +1,54 @@
+form {
+	label {
+		display: block;
+		width: 100%;
+		margin: 0.25em 0;
+		padding: 0.1em 0;
+	}
+}
+
+input, button, textarea, select {
+	width: 100%;
+	margin: 0.5em 0;
+	padding: 0.75em;
+	border: 0;
+	border-bottom: 2px solid $baseColor;
+	background-color: white * 0.97;
+	outline: 0;
+}
+
+select {
+	@extend input;
+	border: 2px solid $baseColor;
+	background-color: transparent;
+}
+
+input[type="submit"], input[type="button"], button {
+	border: 0;
+	background-color: $baseColor;
+	color: white;
+	cursor: pointer;
+
+	&:hover {
+		background-color: $baseColor * 1.1;
+		color: black;
+	}
+}
+
+.login-form {
+	width: 100%;
+	margin: 0 auto;
+	padding: 0;
+}
+
+@media screen and (min-width: $widthMed) {
+	.login-form {
+		width: 75%;
+	}
+}
+
+@media screen and (min-width: $widthLar) {
+	.login-form {
+		width: 50%;
+	}
+}

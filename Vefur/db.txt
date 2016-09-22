@@ -18,3 +18,9 @@ times:
 	time_from
 	time_to
 	day_id
+
+admins:
+	id
+	full_name
+	username
+	password

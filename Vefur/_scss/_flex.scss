@@ -1,4 +1,4 @@
-.times-container {
+.flex-container, .admin-flex-container {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -6,7 +6,7 @@
 	align-content: flex-start;
 }
 
-.time-div {
+.flex-item, .admin-flex-item {
 	width: 100%;
 	min-width: 11em;
 	margin: 0.25em 0;
@@ -16,15 +16,30 @@
 	border: 2px solid $baseColor;
 }
 
+.admin-flex-item {
+	min-height: 20em;
+	border: 0;
+	border-top: 2px solid $baseColor;
+}
+
 @media screen and (min-width: $widthMed) {
-	.time-div {
+	.flex-item {
 		margin: 0.25em 0.5em 0.25em 0;
 		width: 45%;
+	}
+
+	.admin-flex-item {
+		margin: 0.25em 0.5em 0.25em 0;
+		width: 100%;
 	}
 }
 
 @media screen and (min-width: $widthLar) {
-	.time-div {
+	.flex-item {
 		width: 30%;
+	}
+
+	.admin-flex-item {
+		width: 45%;
 	}
 }

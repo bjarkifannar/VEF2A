@@ -17,7 +17,7 @@
 			require_once 'inc/db_connect.php';
 		?>
 		<h1 class="title">Lausar núna:</h1>
-		<div class="times-container">
+		<div class="flex-container">
 		<?php
 			$query = "SELECT buildings.name AS building_name,
 								classrooms.name AS classroom_name,
@@ -46,7 +46,7 @@
 				echo '<h3>Engin gögn fundust</h3>';
 			} else {
 				while ($row = $queryRes->fetch(PDO::FETCH_ASSOC)) {
-					echo '<div class="time-div">';
+					echo '<div class="flex-item">';
 					echo '<h3>'.$row['building_name'].' - '.$row['classroom_name'].'</h3>';
 					echo '<p><b>Time:</b> '.$row['time_from'].' - '.$row['time_to'].'</p>';
 					echo '</div>';

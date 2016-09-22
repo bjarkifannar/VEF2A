@@ -15,7 +15,7 @@
 		?>
 		<h1 class="title">Allir tímar</h1>
 		<h2>Mánudagar:</h2>
-		<div class="times-container">
+		<div class="flex-container">
 		<?php
 			$query = "SELECT buildings.name AS building_name,
 								classrooms.name AS classroom_name,
@@ -37,7 +37,7 @@
 				echo '<h3>Engin gögn fundust</h3>';
 			} else {
 				while ($row = $queryRes->fetch(PDO::FETCH_ASSOC)) {
-					echo '<div class="time-div">';
+					echo '<div class="flex-item">';
 					echo '<h4>'.$row['building_name'].' - '.$row['classroom_name'].'</h4>';
 					echo '<p><b>Time:</b> '.$row['time_from'].' - '.$row['time_to'].'</p>';
 					echo '</div>';
@@ -48,7 +48,7 @@
 		?>
 		</div>
 		<h2>Þriðjudagar:</h2>
-		<div class="times-container">
+		<div class="flex-container">
 		<?php
 			$query = "SELECT buildings.name AS building_name,
 								classrooms.name AS classroom_name,
@@ -70,7 +70,7 @@
 				echo '<h3>Engin gögn fundust</h3>';
 			} else {
 				while ($row = $queryRes->fetch(PDO::FETCH_ASSOC)) {
-					echo '<div class="time-div">';
+					echo '<div class="flex-item">';
 					echo '<h4>'.$row['building_name'].' - '.$row['classroom_name'].'</h4>';
 					echo '<p><b>Time:</b> '.$row['time_from'].' - '.$row['time_to'].'</p>';
 					echo '</div>';
@@ -81,7 +81,7 @@
 		?>
 		</div>
 		<h2>Miðvikudagar:</h2>
-		<div class="times-container">
+		<div class="flex-container">
 		<?php
 			$query = "SELECT buildings.name AS building_name,
 								classrooms.name AS classroom_name,
@@ -103,7 +103,7 @@
 				echo '<h3>Engin gögn fundust</h3>';
 			} else {
 				while ($row = $queryRes->fetch(PDO::FETCH_ASSOC)) {
-					echo '<div class="time-div">';
+					echo '<div class="flex-item">';
 					echo '<h4>'.$row['building_name'].' - '.$row['classroom_name'].'</h4>';
 					echo '<p><b>Time:</b> '.$row['time_from'].' - '.$row['time_to'].'</p>';
 					echo '</div>';
@@ -114,7 +114,7 @@
 		?>
 		</div>
 		<h2>Fimmtudagar:</h2>
-		<div class="times-container">
+		<div class="flex-container">
 		<?php
 			$query = "SELECT buildings.name AS building_name,
 								classrooms.name AS classroom_name,
@@ -136,7 +136,7 @@
 				echo '<h3>Engin gögn fundust</h3>';
 			} else {
 				while ($row = $queryRes->fetch(PDO::FETCH_ASSOC)) {
-					echo '<div class="time-div">';
+					echo '<div class="flex-item">';
 					echo '<h4>'.$row['building_name'].' - '.$row['classroom_name'].'</h4>';
 					echo '<p><b>Time:</b> '.$row['time_from'].' - '.$row['time_to'].'</p>';
 					echo '</div>';
@@ -147,7 +147,7 @@
 		?>
 		</div>
 		<h2>Föstudagar:</h2>
-		<div class="times-container">
+		<div class="flex-container">
 		<?php
 			$query = "SELECT buildings.name AS building_name,
 								classrooms.name AS classroom_name,
@@ -169,7 +169,7 @@
 				echo '<h3>Engin gögn fundust</h3>';
 			} else {
 				while ($row = $queryRes->fetch(PDO::FETCH_ASSOC)) {
-					echo '<div class="time-div">';
+					echo '<div class="flex-item">';
 					echo '<h4>'.$row['building_name'].' - '.$row['classroom_name'].'</h4>';
 					echo '<p><b>Time:</b> '.$row['time_from'].' - '.$row['time_to'].'</p>';
 					echo '</div>';
