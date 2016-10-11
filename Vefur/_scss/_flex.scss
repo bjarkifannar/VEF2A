@@ -6,6 +6,11 @@
 	align-content: flex-start;
 }
 
+.admin-flex-container {
+	width: 100%;
+	justify-content: center;
+}
+
 .flex-item, .admin-flex-item {
 	width: 100%;
 	min-width: 11em;
@@ -14,6 +19,12 @@
 	align-self: flex-start;
 	align-content: center;
 	border: 2px solid $baseColor;
+}
+
+.flex-item {
+	h3, h4, p {
+		margin: 0.3em 0;
+	}
 }
 
 .admin-flex-item {
@@ -40,6 +51,6 @@
 	}
 
 	.admin-flex-item {
-		width: 45%;
+		width: 25%;
 	}
 }

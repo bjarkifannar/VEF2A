@@ -1,7 +1,4 @@
 <?php
-	require_once 'core/init.php';
-	require_once '../inc/db_connect.php';
-
 	$pageName = 'Admin';
 ?>
 <!DOCTYPE html>
@@ -20,45 +17,23 @@
 										 name
 											FROM buildings
 										ORDER BY name ASC";
-				$classroomQuery = "SELECT name
-											FROM classrooms
-												WHERE building_id=:building_id
-											ORDER BY name ASC";
+				$classroomQuery = "SELECT id,
+											name
+												FROM classrooms
+													WHERE building_id=:building_id
+												ORDER BY name ASC";
 		?>
 		<h2 class="title">Welcome <?php echo $_SESSION['username']; ?></h2>
 		<?php
 			if (isset($_POST['submit_classroom'])) {
 				if (isset($_POST['classroom_name'], $_POST['building_id'])) {
 					if ($_POST['building_id'] != "-1") {
-						$exists = FALSE;
-						$classroomName = $_POST['classroom_name'];
-						$buildingID = $_POST['building_id'];
+						$addClassroom = new AddClassroom();
+						$addClassroomRes = $addClassroom->InsertClassroom($db, $_POST['building_id'], $_POST['classroom_name']);
 
-						$checkClassroomQuery = "SELECT name FROM classrooms WHERE building_id=:building_id";
-						$checkClassroomRes = $db->prepare($checkClassroomQuery);
-						$checkClassroomRes->bindParam(':building_id', $buildingID);
-						$checkClassroomRes->execute();
-
-						while ($row = $checkClassroomRes->fetch(PDO::FETCH_ASSOC)) {
-							if ($row['name'] === $classroomName) {
-								echo '<h3 class="error">ERROR! Classroom is already in the database.</h3>';
-								$exists = TRUE;
-							}
-						}
-
-						$checkClassroomRes = null;
-
-						if (!$exists) {
-							$insertClassroomQuery = "INSERT INTO classrooms (building_id, name)
-																	VALUES (:building_id, :classroom_name)";
-							$insertClassroomRes = $db->prepare($insertClassroomQuery);
-							$insertClassroomRes->bindParam(':building_id', $buildingID);
-							$insertClassroomRes->bindParam(':classroom_name', $classroomName);
-
-							if ($insertClassroomRes->execute()) {
-								echo '<h3>Classroom '.$classroomName.' added.</h3>';
-							} else {
-								echo '<h3 class="error">ERROR! Could not add classroom</h3>';
+						if (!empty($addClassroomRes)) {
+							for ($i = 0; $i < count($addClassroomRes); $i++) {
+								echo '<h3 class="error">'.$addClassroomRes[$i].'</h3>';
 							}
 						}
 					} else {
@@ -69,38 +44,31 @@
 				}
 			}
 
-			if (isset($_POST['admin_full_name'], $_POST['admin_username'], $_POST['p'])) {
-				$fullName = filter_input(INPUT_POST, 'admin_full_name', FILTER_SANITIZE_STRING);
-				$username = filter_input(INPUT_POST, 'admin_username', FILTER_SANITIZE_STRING);
-				$password = filter_input(INPUT_POST, 'p', FILTER_SANITIZE_STRING);
-				$errorFlag = FALSE;
-
-				$checkAdminQuery = "SELECT id FROM admins WHERE username=:admin_username LIMIT 1";
-				$checkAdminRes = $db->prepare($checkAdminQuery);
-				$checkAdminRes->bindParam(':admin_username', $username);
-				$checkAdminRes->execute();
-
-				if ($checkAdminRes->rowCount() > 0) {
-					echo '<h3 class="error">ERROR! The admin username is already taken.</h3>';
-					$errorFlag = TRUE;
+			if (isset($_POST['remove_classroom'])) {
+				if (isset($_POST['classroom_name'], $_POST['building_id'])) {
+					RemoveClassroom::Remove($db, $_POST['building_id'], $_POST['classroom_name']);
 				}
+			}
 
-				$checkAdminRes = null;
+			if (isset($_POST['admin_full_name'], $_POST['admin_username'], $_POST['p'])) {
+				$addAdmin = new AddAdmin($db, $_POST['admin_full_name'], $_POST['admin_username'], $_POST['p']);
+				$addAdminRes = $addAdmin->InsertAdmin();
 
-				if (!$errorFlag) {
-					$insertAdminQuery = "INSERT INTO admins (full_name, username, password) VALUES (:full_name, :username, :password)";
-					$insertAdminRes = $db->prepare($insertAdminQuery);
-					$insertAdminRes->bindParam(':full_name', $fullName);
-					$insertAdminRes->bindParam(':username', $username);
-					$insertAdminRes->bindParam(':password', $password);
-
-					if ($insertAdminRes->execute()) {
-						echo '<h3>Admin added to database.</h3>';
-					} else {
-						echo '<h3 class="error">ERROR! Could not add admin to database</h3>';
+				if (!empty($addAdminRes)) {
+					for ($i = 0; $i < count($addAdminRes); $i++) {
+						echo '<h3 class="error">'.$addAdminRes[$i].'</h3>';
 					}
+				}
+			}
 
-					$insertAdminRes = null;
+			if (isset($_POST['remove_admin'])) {
+				$adminID = $_POST['admin_id'];
+
+				if ($adminID !== '-1') {
+					$removeAdminRes = RemoveAdmin::Remove($db, $adminID);
+					echo '<h3 class="error">'.$removeAdminRes.'</h3>';
+				} else {
+					echo '<h3 class="error">You have to select and admin to remove.</h3>';
 				}
 			}
 
@@ -119,6 +87,10 @@
 						echo '<h3 class="error">ERROR! This building is already in the database</h3>';
 					}
 
+					if (strlen($buildingName) < 1) {
+						$errorFlag = TRUE;
+					}
+
 					$checkBuildingRes = null;
 
 					if (!$errorFlag) {
@@ -132,6 +104,16 @@
 					}
 				} else {
 					echo '<h3 class="error">ERROR! Building name missing</h3>';
+				}
+			}
+
+			if (isset($_POST['remove_building'])) {
+				if (isset($_POST['building_id'])) {
+					$buildingID = $_POST['building_id'];
+
+					if ($buildingID !== -1) {
+						RemoveBuilding::Remove($db, $buildingID);
+					}
 				}
 			}
 		?>
@@ -153,13 +135,12 @@
 							echo 'No classrooms found.';
 						} else {
 							while ($row2 = $classroomRes->fetch(PDO::FETCH_ASSOC)) {
-								echo $row2['name'].'. ';
+								echo '<a href="edit_times.php?cid='.$row2['id'].'">'.$row2['name'].'</a>. ';
 							}
 						}
 					}
 
-					$classroomRes = null;
-					$buildingRes = null;
+					$classroomRes = $buildingRes = null;
 				?>
 			</div>
 			<div class="row admin-flex-item">
@@ -184,6 +165,41 @@
 					<input type="submit" name="submit_classroom" value="Add">
 				</form>
 			</div>
+			<div class="row admin-flex-item">
+				<h2 class="title">Remove classroom:</h2>
+				<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+					<label for="classroom_name">Classroom name:</label>
+					<input type="text" name="classroom_name">
+					<label for="building_id">Building:</label>
+					<select name="building_id">
+						<option value="-1" selected disabled>Select Building</option>
+						<?php
+							$buildingRes = $db->prepare($buildingQuery);
+							$buildingRes->execute();
+
+							while ($row = $buildingRes->fetch(PDO::FETCH_ASSOC)) {
+								echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+							}
+
+							$buildingRes = null;
+						?>
+					</select>
+					<input type="submit" name="remove_classroom" value="Remove">
+				</form>
+			</div>
+			<div class="row admin-flex-item no-border">
+				<h2 class="title">Building list:</h2>
+				<?php
+					$buildingRes = $db->prepare($buildingQuery);
+					$buildingRes->execute();
+
+					while ($row = $buildingRes->fetch(PDO::FETCH_ASSOC)) {
+						echo $row['name'].'<br>';
+					}
+
+					$buildingRes = null;
+				?>
+			</div>
 			<div class="row admin-flex-item no-border">
 				<h2 class="title">Add building:</h2>
 				<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
@@ -191,6 +207,40 @@
 					<input type="text" name="building_name" id="building_name">
 					<input type="submit" name="submit_building" value="Add">
 				</form>
+			</div>
+			<div class="row admin-flex-item no-border">
+				<h2 class="title">Remove building:</h2>
+				<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+					<label for="building_id">Building:</label>
+					<select name="building_id" id="building_id">
+						<option value="-1" disabled selected>Select building</option>
+						<?php
+							$buildingRes = $db->prepare($buildingQuery);
+							$buildingRes->execute();
+
+							while ($row = $buildingRes->fetch(PDO::FETCH_ASSOC)) {
+								echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+							}
+
+							$buildingRes = null;
+						?>
+					</select>
+					<input type="submit" name="remove_building" value="Remove">
+				</form>
+			</div>
+			<div class="row admin-flex-item no-border">
+				<h2 class="title">Admin list:</h2>
+				<?php
+					$adminQuery = "SELECT full_name, username FROM admins ORDER BY full_name ASC";
+					$adminRes = $db->prepare($adminQuery);
+					$adminRes->execute();
+
+					while ($row = $adminRes->fetch(PDO::FETCH_ASSOC)) {
+						echo '<b>'.$row['username'].':</b> '.$row['full_name'].'<br>';
+					}
+
+					$adminRes = null;
+				?>
 			</div>
 			<div class="row admin-flex-item no-border">
 				<h2 class="title">Add admin:</h2>
@@ -202,6 +252,27 @@
 					<label for="admin_pwd">Password:</label>
 					<input type="password" name="admin_pwd">
 					<input type="button" name="submit_admin" onclick="formhash(this.form, this.form.admin_pwd);" value="Add">
+				</form>
+			</div>
+			<div class="row admin-flex-item no-border">
+				<h2 class="title">Remove Admin</h2>
+				<form action="" method="POST">
+					<label for="admin_id">Admin:</label>
+					<select name="admin_id" id="admin_id">
+						<option value="-1" disabled selected>Select admin</option>
+						<?php
+							$adminQuery = "SELECT id, full_name, username FROM admins";
+							$adminRes = $db->prepare($adminQuery);
+							$adminRes->execute();
+
+							while ($row = $adminRes->fetch(PDO::FETCH_ASSOC)) {
+								echo '<option value="'.$row['id'].'">'.$row['username'].': '.$row['full_name'].'</option>';
+							}
+
+							$adminQuery = $adminRes = null;
+						?>
+					</select>
+					<input type="submit" name="remove_admin" value="Remove">
 				</form>
 			</div>
 		</div>

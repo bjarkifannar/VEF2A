@@ -1,7 +1,5 @@
 <?php
-	require_once 'core/functions.php';
-
-	sec_session_start();
+	require_once 'core/init.php';
 
 	$_SESSION = array();
 	$params = session_get_cookie_params();

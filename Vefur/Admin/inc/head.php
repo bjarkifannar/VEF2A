@@ -1,9 +1,9 @@
 <?php
-	sec_session_start();
+	require_once 'core/init.php';
 
 	$logged = 'out';
 
-	if (login_check()) {
+	if ($login->login_check()) {
 		$logged = 'in';
 	}
 ?>

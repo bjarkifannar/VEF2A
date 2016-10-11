@@ -3,8 +3,6 @@
 
 	$currentTime = date('H:i');
 	$currentDayID = date('N');
-
-	$numRows = 0;
 ?>
 <!DOCTYPE html>
 <html>

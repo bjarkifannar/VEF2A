@@ -1,7 +1,4 @@
 <?php
-	require_once 'core/init.php';
-	require_once '../inc/db_connect.php';
-
 	$pageName = 'Admin - Login';
 ?>
 <!DOCTYPE html>
@@ -20,7 +17,7 @@
 					$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
 					$password = filter_input(INPUT_POST, 'p', FILTER_SANITIZE_STRING);
 
-					if (login($username, $password, $db) === "Success") {
+					if ($login->Login($username, $password, $db) === "Success") {
 						header('Location: index.php');
 					} else {
 						echo '<h3  class="error">ERROR! Could not log you in.</h3>';
