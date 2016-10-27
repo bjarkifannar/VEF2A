@@ -17,6 +17,11 @@ input, button, textarea, select {
 	outline: 0;
 }
 
+input[type="file"] {
+	background-color: white;
+	border: 0;
+}
+
 select {
 	@extend input;
 	border: 2px solid $baseColor;

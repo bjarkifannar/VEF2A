@@ -60,7 +60,27 @@
 		public function Remove($db, $building_id, $name) {
 			$building_id = filter_var($building_id, FILTER_VALIDATE_INT);
 			$name = filter_var($name, FILTER_SANITIZE_STRING);
+			$name = trim($name);
 			$errorMsg = [];
+			$classroomID = null;
+
+			$classroomIDQuery = "SELECT id FROM classrooms WHERE building_id=:building_id AND name=:name LIMIT 1";
+			$classroomIDRes = $db->prepare($classroomIDQuery);
+			$classroomIDRes->bindParam(':building_id', $building_id);
+			$classroomIDRes->bindParam(':name', $name);
+			$classroomIDRes->execute();
+
+			while ($row = $classroomIDRes->fetch(PDO::FETCH_ASSOC)) {
+				$classroomID = $row['id'];
+			}
+
+			$classroomIDQuery = $classroomIDRes = null;
+
+			$removeTimesQuery = "DELETE FROM times WHERE classroom_id=:classroom_id";
+			$removeTimesRes = $db->prepare($removeTimesQuery);
+			$removeTimesRes->bindParam(':classroom_id', $classroomID);
+			$removeTimesRes->execute();
+			$removeTimesQuery = $removeTimesRes = null;
 
 			$removeQuery = "DELETE FROM classrooms WHERE building_id=:building_id AND name=:name";
 			$removeRes = $db->prepare($removeQuery);

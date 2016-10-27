@@ -135,7 +135,7 @@
 							echo 'No classrooms found.';
 						} else {
 							while ($row2 = $classroomRes->fetch(PDO::FETCH_ASSOC)) {
-								echo '<a href="edit_times.php?cid='.$row2['id'].'">'.$row2['name'].'</a>. ';
+								echo '<a href="edit_times.php?cid='.$row2['id'].'">'.trim($row2['name']).'</a>. ';
 							}
 						}
 					}
@@ -164,6 +164,7 @@
 					</select>
 					<input type="submit" name="submit_classroom" value="Add">
 				</form>
+				<a href="upload_file.php">Upload File</a>
 			</div>
 			<div class="row admin-flex-item">
 				<h2 class="title">Remove classroom:</h2>

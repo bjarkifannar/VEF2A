@@ -4,6 +4,10 @@
 		private $username;
 		private $password;
 
+		public function __construct($db) {
+			$this->mDB = $db;
+		}
+
 		function sec_session_start() {
 			$sessionName = 'sec_session_id';
 			$secure = false; /* false is for development ONLY! */
@@ -35,17 +39,24 @@
 		function login_check() {
 			/* If the session variables are set */
 			if (isset($_SESSION['user_id'], $_SESSION['username'], $_SESSION['login_string'])) {
-				/* The user is logged in */
-				return true;
+				$loginCheckQuery = "SELECT username FROM admins WHERE id=:user_id LIMIT 1";
+				$loginCheckRes = $this->mDB->prepare($loginCheckQuery);
+				$loginCheckRes->bindParam(':user_id', $_SESSION['user_id']);
+				$loginCheckRes->execute();
+
+				if ($loginCheckRes->rowCount() === 1) {
+					/* The user is logged in */
+					return true;
+				}
 			} else {
 				/* The user is not logged in */
 				return false;
 			}
 		}
 
-		function Login($username, $password, $db) {
+		function Login($username, $password) {
 			$loginQuery = "SELECT id, full_name, password FROM admins WHERE username=:username LIMIT 1";
-			$loginRes = $db->prepare($loginQuery);
+			$loginRes = $this->mDB->prepare($loginQuery);
 			$loginRes->bindParam(':username', $username);
 			$loginRes->execute();
 
