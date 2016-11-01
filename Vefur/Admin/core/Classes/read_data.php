@@ -31,13 +31,10 @@
 				if (substr($line, 0, 1) === '#') {
 					if (strtolower(substr($line, 1, 9)) === 'buildings') {
 						$curData = 'buildings';
-						//$this->mMsg[] = 'Buildings:';
 					} else if (strtolower(substr($line, 1, 10)) === 'classrooms') {
 						$curData = 'classrooms';
-						//$this->mMsg[] = 'Classrooms:';
 					} else if (strtolower(substr($line, 1, 5)) === 'times') {
 						$curData = 'times';
-						//$this->mMsg[] = 'Times:';
 					}
 				} else {
 					if ($curData === 'buildings') {
@@ -45,21 +42,20 @@
 
 						if (count($data) === 2) {
 							$this->mBuildings[] = ['building_id' => $data[0], 'building_name' => $data[1]];
-							//$this->mMsg[] = 'Building ID: '.$data[0].', Building name: '.$data[1];
 						}
 					} else if ($curData === 'classrooms') {
 						$data = explode(';', $line);
 
-						if (count($data) === 3) {
-							$this->mClassrooms[] = ['building_id' => $data[0], 'classroom_id' => $data[1], 'classroom_name' => $data[2]];
-							//$this->mMsg[] = 'Building ID: '.$data[0].', Classroom ID: '.$data[1].', Classroom name: '.$data[2];
+						if (count($data) === 2) {
+						//if (count($data) === 3) {
+							$this->mClassrooms[] = ['building_id' => $data[0], 'classroom_name' => $data[1]];
+							//$this->mClassrooms[] = ['building_id' => $data[0], 'classroom_id' => $data[1], 'classroom_name' => $data[2]];
 						}
 					} else if ($curData === 'times') {
 						$data = explode(';', $line);
 
-						if (count($data) === 4) {
-							$this->mTimes[] = ['classroom_id' => $data[0], 'time_from' => $data[1], 'time_to' => $data[2], 'day_id' => $data[3]];
-							//$this->mMsg[] = 'Classroom ID: '.$data[0].', Time from: '.$data[1].', Time to: '.$data[2].', Day ID: '.$data[3];
+						if (count($data) === 5) {
+							$this->mTimes[] = ['building_id' => $data[0], 'classroom_name' => $data[1], 'time_from' => $data[2], 'time_to' => $data[3], 'day_id' => $data[4]];
 						}
 					}
 				}
@@ -101,15 +97,34 @@
 				$classroomRes->execute();
 			}
 
+			$getClassroomIDQuery = "SELECT id FROM classrooms WHERE building_id=:building_id AND name=:classroom_name LIMIT 1";
+			$getClassroomIDRes = $this->mDB->prepare($getClassroomIDQuery);
+
 			$timeRes = $this->mDB->prepare($timeQuery);
 
 			foreach ($this->mTimes as $times) {
-				$timeRes->bindParam(':classroom_id', $times['classroom_id']);
-				$timeRes->bindParam(':time_from', $times['time_from']);
-				$timeRes->bindParam(':time_to', $times['time_to']);
-				$timeRes->bindParam(':day_id', $times['day_id']);
-				$timeRes->execute();
+				$buildingID = null;
+
+				$getClassroomIDRes->bindParam(':building_id', $times['building_id']);
+				$getClassroomIDRes->bindParam(':classroom_name', $times['classroom_name']);
+				$getClassroomIDRes->execute();
+
+				if ($getClassroomIDRes->rowCount() > 0) {
+					while ($row = $getClassroomIDRes->fetch(PDO::FETCH_ASSOC)) {
+						$buildingID = $row['id'];
+					}
+
+					$timeRes->bindParam(':classroom_id', $buildingID);
+					$timeRes->bindParam(':time_from', $times['time_from']);
+					$timeRes->bindParam(':time_to', $times['time_to']);
+					$timeRes->bindParam(':day_id', $times['day_id']);
+					$timeRes->execute();
+				} else {
+					$this->mMsg[] = 'Cannot add time: Classroom '.$times['classroom_name'].' with building ID '.$times['building_id'].' not found.';
+				}
 			}
+
+			$getClassroomIDQuery = $getClassroomIDRes = null;
 		}
 	}
 ?>

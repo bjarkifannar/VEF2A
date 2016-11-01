@@ -45,7 +45,8 @@
 			} else {
 				while ($row = $queryRes->fetch(PDO::FETCH_ASSOC)) {
 					echo '<div class="flex-item">';
-					echo '<h3>'.$row['building_name'].' - '.$row['classroom_name'].'</h3>';
+					echo '<h3>'.$row['classroom_name'].'</h3>';
+					echo '<h4>'.$row['building_name'].'</h4>';
 					echo '<p><b>Time:</b> '.$row['time_from'].' - '.$row['time_to'].'</p>';
 					echo '</div>';
 				}

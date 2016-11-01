@@ -15,8 +15,7 @@
 
 			/* If the session is not secure */
 			if (ini_set('session.use_only_cookies', 1) === FALSE) {
-				/* Show an error and exit */
-				header('Location: error.php/Could not start a secure session');
+				/* Exit */
 				exit();
 			}
 			
@@ -39,12 +38,16 @@
 		function login_check() {
 			/* If the session variables are set */
 			if (isset($_SESSION['user_id'], $_SESSION['username'], $_SESSION['login_string'])) {
-				$loginCheckQuery = "SELECT username FROM admins WHERE id=:user_id LIMIT 1";
+				$loginCheckQuery = "SELECT username, has_max_permission FROM admins WHERE id=:user_id LIMIT 1";
 				$loginCheckRes = $this->mDB->prepare($loginCheckQuery);
 				$loginCheckRes->bindParam(':user_id', $_SESSION['user_id']);
 				$loginCheckRes->execute();
 
 				if ($loginCheckRes->rowCount() === 1) {
+					while ($row = $loginCheckRes->fetch(PDO::FETCH_ASSOC)) {
+						$_SESSION['has_max_permission'] = $row['has_max_permission'];
+					}
+
 					/* The user is logged in */
 					return true;
 				}
@@ -83,5 +86,5 @@
 			/* Login failed */
 			return "Fail";
 		}
-	};
+	}
 ?>

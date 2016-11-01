@@ -1,4 +1,23 @@
 <?php
+	class Classroom {
+		public function GetNameFromID($db, $classroom_id) {
+			$classroomName = 'Not Found';
+
+			$classroomNameQuery = "SELECT name FROM classrooms WHERE id=:classroom_id LIMIT 1";
+			$classroomNameRes = $db->prepare($classroomNameQuery);
+			$classroomNameRes->bindParam(':classroom_id', $classroom_id);
+			$classroomNameRes->execute();
+
+			if ($classroomNameRes->rowCount() === 1) {
+				while ($row = $classroomNameRes->fetch(PDO::FETCH_ASSOC)) {
+					$classroomName = $row['name'];
+				}
+			}
+
+			return $classroomName;
+		}
+	}
+
 	class AddClassroom {
 		private $mDB = null;
 		private $buildingID = -1;
@@ -54,7 +73,7 @@
 
 			return $this->errorMsg;
 		}
-	};
+	}
 
 	class RemoveClassroom {
 		public function Remove($db, $building_id, $name) {
@@ -95,5 +114,5 @@
 
 			return $errorMsg;
 		}
-	};
+	}
 ?>

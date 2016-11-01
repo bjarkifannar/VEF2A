@@ -18,30 +18,71 @@
 				if ($cid === -1) {
 					echo '<h3 class="error">ERROR! Classroom ID not set.</h3>';
 				} else {
-					$classroomName = '';
+					$timesClass = new TimesClass();
 
-					$classroomNameQuery = "SELECT name FROM classrooms WHERE id=$cid LIMIT 1";
-					$classroomNameRes = $db->prepare($classroomNameQuery);
-					$classroomNameRes->execute();
+					$classroomName = Classroom::GetNameFromID($db, $cid);
 
-					if ($classroomNameRes->rowCount() < 1) {
+					if ($classroomName === 'Not Found') {
 						echo '<h3 class="error">ERROR! Classroom not found.</h3>';
 					} else {
-						while ($row = $classroomNameRes->fetch(PDO::FETCH_ASSOC)) {
-							$classroomName = $row['name'];
-						}
-					}
-
-					$classroomNameRes = null;
-
-					if ($classroomName !== '') {
 						echo '<h2 class="title">Classroom '.$classroomName.'</h2>';
 
-						if (isset($_POST['remove_time'])) {
-							TimesClass::RemoveTime($db, $_POST['time_id']);
+						if (isset($_POST['add_time'])) {
+							$errorFlag = FALSE;
+
+							$timeFrom = (isset($_POST['time_from']) ? $_POST['time_from'] : null);
+							$timeTo = (isset($_POST['time_to']) ? $_POST['time_to'] : null);
+							$dayID = (isset($_POST['day_id']) ? $_POST['day_id'] : null);
+
+							if ($timeFrom === null || $timeTo === null || $dayID === null) {
+								$errorFlag = TRUE;
+							}
+
+							if ($errorFlag) {
+								echo '<h3 class="error">ERROR! Missing information</h3>';
+							} else {
+								$addTimeRes = $timesClass->AddTime($db, $cid, $timeFrom, $timeTo, $dayID);
+
+								if (strtoupper($addTimeRes) === 'ERROR') {
+									$addTimeErrors = $timesClass->GetErrorMsg();
+
+									foreach ($addTimeErrors as $err) {
+										echo '<h3 class="error">'.$err.'</h3>';
+									}
+								} else {
+									echo '<h3 class="message">Time added</h3>';
+								}
+							}
 						}
 
-						$timesRes = TimesClass::GetTimes($db, $cid);
+						if (isset($_POST['remove_time'])) {
+							$timesClass->RemoveTime($db, $_POST['time_id']);
+						}
+
+						$timesRes = $timesClass->GetTimes($db, $cid);
+
+						echo '<h3 class="title">Add Time:</h3>';
+						echo '<form action="" method="POST">';
+						echo '<label for="time_from">Time from:</label>';
+						echo '<input type="text" name="time_from" id="time_from" required>';
+						echo '<label for="time_to">Time to:</label>';
+						echo '<input type="text" name="time_to" id="time_to" required>';
+						echo '<label for="day_id">Day:</label>';
+						echo '<select name="day_id" id="day_id">';
+
+						$dayQuery = "SELECT id, name FROM days ORDER BY id ASC";
+						$dayRes = $db->prepare($dayQuery);
+						$dayRes->execute();
+
+						while ($row = $dayRes->fetch(PDO::FETCH_ASSOC)) {
+							echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+						}
+
+						$dayQuery = $dayRes = null;
+
+						echo '</select>';
+						echo '<input type="submit" name="add_time" value="Add">';
+						echo '</form>';
 
 						if (!is_array($timesRes)) {
 							echo '<h2>'.$timesRes.'</h2>';
