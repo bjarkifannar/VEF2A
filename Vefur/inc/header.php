@@ -11,9 +11,9 @@
 						}
 
 						if ($pageName == 'Allt') {
-							echo '<li><a href="page2.php" class="current-page">Allt</a></li>';
+							echo '<li><a href="all.php" class="current-page">Allt</a></li>';
 						} else {
-							echo '<li><a href="page2.php">Allt</a></li>';
+							echo '<li><a href="all.php">Allt</a></li>';
 						}
 					?>
 				</ul>

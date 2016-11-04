@@ -1,0 +1,2 @@
+Aðgangur fyrir nemandafélög/kennara til að bóka stofur
+Herða admin aðgang

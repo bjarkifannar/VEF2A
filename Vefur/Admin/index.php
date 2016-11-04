@@ -130,6 +130,9 @@
 			</div>
 			<div class="row admin-flex-item">
 				<h2 class="title">Add classroom:</h2>
+				<?php
+					if ($_SESSION['has_max_permission'] === '1') {
+				?>
 				<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
 					<label>Classroom name:</label>
 					<input type="text" name="classroom_name" required>
@@ -150,9 +153,17 @@
 					<input type="submit" name="submit_classroom" value="Add">
 				</form>
 				<a href="upload_file.php">Upload File</a>
+				<?php
+					} else {
+						echo $noPermissionMessage;
+					}
+				?>
 			</div>
 			<div class="row admin-flex-item">
 				<h2 class="title">Remove classroom:</h2>
+				<?php
+					if ($_SESSION['has_max_permission'] === '1') {
+				?>
 				<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
 					<label>Classroom name:</label>
 					<input type="text" name="classroom_name" required>
@@ -172,6 +183,11 @@
 					</select>
 					<input type="submit" name="remove_classroom" value="Remove">
 				</form>
+				<?php
+					} else {
+						echo $noPermissionMessage;
+					}
+				?>
 			</div>
 			<div class="row admin-flex-item no-border">
 				<h2 class="title">Building list:</h2>
@@ -188,14 +204,25 @@
 			</div>
 			<div class="row admin-flex-item no-border">
 				<h2 class="title">Add building:</h2>
+				<?php
+					if ($_SESSION['has_max_permission'] === '1') {
+				?>
 				<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
 					<label>Building name:</label>
 					<input type="text" name="building_name" required>
 					<input type="submit" name="submit_building" value="Add">
 				</form>
+				<?php
+					} else {
+						echo $noPermissionMessage;
+					}
+				?>
 			</div>
 			<div class="row admin-flex-item no-border">
 				<h2 class="title">Remove building:</h2>
+				<?php
+					if ($_SESSION['has_max_permission'] === '1') {
+				?>
 				<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
 					<label for="building_id">Building:</label>
 					<select name="building_id" id="building_id">
@@ -213,6 +240,11 @@
 					</select>
 					<input type="submit" name="remove_building" value="Remove">
 				</form>
+				<?php
+					} else {
+						echo $noPermissionMessage;
+					}
+				?>
 			</div>
 			<div class="row admin-flex-item no-border">
 				<h2 class="title">Admin list:</h2>

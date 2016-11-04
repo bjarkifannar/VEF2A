@@ -6,6 +6,7 @@
 					<li><a href="index.php">Admin Panel</a></li>
 					<?php
 						if ($logged === 'in') {
+							echo '<li><a href="doc.php">Documentation</a></li>';
 							echo '<li><a href="logout.php">Logout</a></li>';
 						}
 					?>

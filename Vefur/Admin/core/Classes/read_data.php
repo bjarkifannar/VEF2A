@@ -47,9 +47,7 @@
 						$data = explode(';', $line);
 
 						if (count($data) === 2) {
-						//if (count($data) === 3) {
 							$this->mClassrooms[] = ['building_id' => $data[0], 'classroom_name' => $data[1]];
-							//$this->mClassrooms[] = ['building_id' => $data[0], 'classroom_id' => $data[1], 'classroom_name' => $data[2]];
 						}
 					} else if ($curData === 'times') {
 						$data = explode(';', $line);
